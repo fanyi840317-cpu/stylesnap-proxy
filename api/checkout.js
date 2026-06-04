@@ -7,7 +7,7 @@ const DODO_API_KEY = process.env.DODO_API_KEY || '';
 const DODO_BASE_URL = process.env.DODO_ENV === 'live'
   ? 'https://live.dodopayments.com'
   : 'https://test.dodopayments.com';
-const PRODUCT_ID = process.env.DODO_PRODUCT_ID || 'pdt_REPLACE_ME_STYLESNAP_PRO';
+const PRODUCT_ID = process.env.DODO_PRODUCT_ID || 'pdt_0NgJpLrjYb5WyvHwo2Z5X';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -28,6 +28,7 @@ export default async function handler(req, res) {
 
     const checkoutBody = {
       product_cart: [{ product_id: PRODUCT_ID, quantity: 1 }],
+      // return_url will receive ?license_key=PRO-XXXX&email=... after payment
       return_url: 'https://stylesnap.dev/success',
       cancel_url: 'https://stylesnap.dev',
       allowed_payment_method_types: [
