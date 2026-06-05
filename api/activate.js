@@ -1,7 +1,7 @@
 // Vercel Serverless Function — Activate StyleSnap Pro License Key
 // POST /api/activate
 // Body: { license_key: string, device_name: string }
-// Returns: { activated: boolean, instance_id?, activations_used?, activations_limit?, error? }
+// Returns: { activated: boolean, instance_id?, error?, limit_reached? }
 //
 // Proxies to DodoPayments public /licenses/activate endpoint (no API key needed)
 
@@ -59,8 +59,6 @@ export default async function handler(req, res) {
     return res.status(200).json({
       activated: true,
       instance_id: data.id,
-      activations_used: data.activations_used,
-      activations_limit: data.activations_limit,
     });
 
   } catch (err) {

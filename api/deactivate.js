@@ -41,13 +41,21 @@ export default async function handler(req, res) {
       }),
     });
 
-    const data = await deactivateRes.json();
+    // DodoPayments deactivate returns 200 with empty body on success
+    const text = await deactivateRes.text();
+    let data = {};
+    if (text) {
+      try { data = JSON.parse(text); } catch { /* empty response is success */ }
+    }
 
     if (!deactivateRes.ok) {
-      console.error('[Deactivate] Dodo error:', deactivateRes.status, JSON.stringify(data));
+      console.error('[Deactivate] Dodo error:', deactivateRes.status, text);
+      const errMsg = (data.error || data.message || '').toString();
+      // Check for specific error codes
+      const isNotFound = data.code === 'LICENSE_KEY_NOT_FOUND';
       return res.status(200).json({
         deactivated: false,
-        error: data.error || data.message || 'Deactivation failed.',
+        error: isNotFound ? 'Instance not found. It may have already been deactivated.' : (errMsg || 'Deactivation failed.'),
       });
     }
 
